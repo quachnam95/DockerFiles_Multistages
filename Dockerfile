@@ -1,33 +1,22 @@
-FROM alpine:3.5
+# Build Stage 1
+# This build created a staging docker image 
+#
+FROM node:10.15.2-alpine
+WORKDIR /usr/src/app
+COPY package.json ./
+COPY .babelrc ./
+RUN npm install
+COPY ./src ./src
+RUN npm run build
 
-# install node
-RUN apk add --no-cache nodejs tini
-
-# set working directory
-WORKDIR /root/demochat
-
-# copy project file
-COPY package.json .
-
-# set NODE_ENV 
-ENV NODE_ENV production
-
-# install node packages
-RUN apk add --no-cache --virtual .build-dep python make g++ krb5-dev && \
-    npm set progress=false && \
-    npm config set depth 0 && \
-    npm install && \
-    npm cache clean && \
-    apk del .build-dep && \
-    rm -rf /tmp/*
-
-# copy app files
-COPY . .
-
-# Set tini as entrypoint
-ENTRYPOINT ["/sbin/tini", "--"]
-
-#application server
-EXPOSE 5000
-
-CMD npm run start
+# Build Stage 2
+# This build takes the production build from staging build
+#
+FROM node:10.15.2-alpine
+WORKDIR /usr/src/app
+COPY package.json ./
+COPY .babelrc ./
+RUN npm install
+COPY --from=0 /usr/src/app/dist ./dist
+EXPOSE 4002
+CMD npm start

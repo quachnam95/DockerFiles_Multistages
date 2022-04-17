@@ -1,16 +1,18 @@
-# Dockerized NodeJS application
+# Multi-Stage Docker Build in Node.js and Babel
+This Repository contains code for Multi-Stage Docker Build in Node.js,Babel with Mongodb.
+### Requirement
+- [Node.js](https://nodejs.org/en/download/)
+- [Docker](https://docs.docker.com/docker-for-mac/)
 
-![Let's Chat Greylock](http://i.imgur.com/0a3l5VF.png)
+### Development Setup
 
-![Screenshot](http://i.imgur.com/C4uMD67.png)
+```
+ npm install
+ npm run dev
+```
 
-This is an example Node application packaged with Docker.
-It is packaged using Codefresh.
+### Docker Production Build
 
-More details can be found in [the documentation page](https://codefresh.io/docs/docs/learn-by-example/nodejs/lets-chat/).
-
-
-
-
-
-
+```
+ docker-compose up
+```
